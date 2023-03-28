@@ -1,0 +1,80 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="row mx-2 py-3">
+  <h1 class="mb-3">Settings</h1>
+  <div class="col-12">
+      <table class="table border rounded">
+          <thead>
+            <tr>
+              <th class="text-center">#</th>
+              <th class="text-center">MOTOR NAME</th>
+              <th class="text-center">OPERATION PIN</th>
+              <th class="text-center">RELAY</th>
+              <th class="text-center">FEEDBACK</th>
+              <th class="text-center">PIN</th>
+              <th class="text-center">BUFFER TIME</th>
+              <th class="text-center">ACTION</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if settings is not none %}
+              {% for key, value in settings.items() %}
+              <tr>
+                <td class="text-center">{{loop.index}}</td>
+                <td class="text-center">{{"MOTOR "~value["index"]}}</td>
+                {% if value["operation_pin"]==1 %}
+                <td class="text-center">{{"FORWARD "~value["index"]}}</td>
+                {% else %}
+                <td class="text-center">{{"REVERSE "~value["index"]}}</td>
+                {% endif %}
+                <td class="text-center">{{value["relay"]}}</td>
+                {% if value["feed_back"]==1 %}
+                <td class="text-center">{{"FORWARD "~value["index"]}}</td>
+                {% else %}
+                <td class="text-center">{{"REVERSE "~value["index"]}}</td>
+                {% endif %}
+                <td class="text-center">{{value["pin"]}}</td>
+                <td class="text-center">{{value["buffer_time"]}}</td>
+                <td class="text-center"><button class="btn btn-secondary me-2 p-2 py-1 edit-form" data-index="{{key}}"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-title="Edit"></i></button></td>
+              </tr>
+              {% endfor %}
+            {% endif %}
+          </tbody>
+      </table>
+  </div>
+</div>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="editoffcanvas" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvas-title" class="offcanvas-title"></h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div id="editform" class="offcanvas-body">
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+  const bsOffcanvas = new bootstrap.Offcanvas('#editoffcanvas')
+  $(".edit-form").on("click", function(){
+    var index = $(this).attr("data-index");
+    $.ajax({
+      url: `{{url_for('settings.edit_form')}}?index=${index}`,
+      method: "GET",
+      success: function(response) {
+        if(response!=="error"){
+          $("#editform").html(response);
+          bsOffcanvas.show();
+        }else{
+          console.log(response);
+        }
+      },  
+      error: function(jqXHR, textStatus, errorThrown) {
+        $("#alert").html(`<div class="alert alert-danger" role="alert">Something went wrong</div>`);
+      }
+    });
+  });
+</script>
+{% endblock %}

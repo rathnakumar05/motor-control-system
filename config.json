@@ -1,0 +1,11 @@
+{
+    "ADMIN" : {
+        "username" : "admin",
+        "password" : "admin"
+    },
+    "SQL" : "D:\\00-workstation\\flask\\motor-control-system\\db\\mcs.db",
+    "SETTINGS_PATH" : "D:\\00-workstation\\flask\\motor-control-system\\app\\files\\settings.json",
+    "BACKUP_SETTINGS_PATH" : "D:\\00-workstation\\flask\\motor-control-system\\app\\files\\backup_settings.json",
+    "OUTPUT_PATH" : "D:\\00-workstation\\flask\\motor-control-system\\app\\files\\output.json",
+    "INPUT_PATH" : "D:\\00-workstation\\flask\\motor-control-system\\app\\files\\input.json"
+}

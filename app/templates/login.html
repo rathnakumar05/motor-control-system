@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motor control system</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='font/bootstrap-icons.css') }}" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-white fixed-top border-bottom" style="height: 56.67px">
+            <div class="container-fluid">
+                <a class="navbar-brand ms-2 fw-semibold">Motor control system</a>
+            </div>
+        </nav>
+    </header>
+    <main style="margin-top: 70px;">
+        <div class="container-fluid">
+            <div class="card mx-auto shadow" style="max-width: 30rem;">
+                <div class="card-body">
+                    <h1 class="card-title">Login</h1>
+                    <form class="mt-4" method="POST" action="">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password">
+                        </div>
+                        {% if request.path==url_for('auth.user_login') %}
+                        <p>admin ? <a href="{{url_for('auth.login')}}">click</a></p>
+                        {% else %}
+                        <p>user ? <a href="{{url_for('auth.user_login')}}">click</a></p>
+                        {% endif %}
+                        <button type="submit" class="btn btn-outline-secondary w-100">Submit</button>
+                    </form>
+                </div>
+            </div>
+            {% if error["message"] != "" %}
+            <div class="alert alert-danger mt-3 mx-auto text-center" role="alert" style="max-width: 30rem;">
+                {{error["message"]}}
+            </div>
+            {% endif %}
+        </div>
+    </main>
+</body>
+<script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</html>

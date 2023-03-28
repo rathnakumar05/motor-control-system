@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motor control system</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-icons.css') }}">
+    <style>
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            padding: 56.67px 0 0;
+            width: calc(2rem + 24px);
+            z-index: 600;
+            transition: all 500ms ease;
+        }
+
+        .sidebar.active {
+            width: 240px;
+        }
+    
+        .sidebar-sticky {
+          position: relative;
+          top: 0;
+          height: calc(100vh - 48px);
+          overflow-x: hidden;
+          overflow-y: auto;
+        }
+
+        #sidebar-action-btn {
+          transition: all 500ms ease;
+        }
+    
+        #sidebar-action-btn.active {
+          transform: rotate(180deg);
+        }
+
+        @media (max-width: 991.98px) {
+          .sidebar {
+            width: 100% !important;
+          }
+        }
+    
+        @media (min-width: 991.98px) {
+          #main {
+            padding-left: calc(2rem + 24px);
+            transition: all 500ms ease;
+          }
+
+          header:has(> .sidebar.active) ~ #main{
+            padding-left: 240px;
+          }
+
+          .sidebar:hover{
+            width: 240px;
+          }
+
+          header:has(> .sidebar:hover) ~ #main{
+            padding-left: 240px;
+          }
+
+        }
+    </style>
+    {% block style %}
+    {% endblock %}
+</head>
+<body>
+    <header>
+        <nav id="sidebar" class="collapse navbar-collapse d-lg-block sidebar bg-white shadow">
+            <div class="sidebar-sticky p-0">
+                <div class="list-group list-group-flush">
+                    <a href="{{url_for('dashboard.index')}}" class="d-flex align-items-center list-group-item list-group-item-action px-3 {% if request.path==url_for('dashboard.index') %}list-group-item-dark{% endif %}"  aria-current="true">
+                        <i class="bi bi-columns-gap fs-4 me-3"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    {% if session.get('role')=="admin" %}
+                    <a href="#" class="d-flex align-items-center list-group-item list-group-item-action px-3"  aria-current="true">
+                        <i class="bi bi-file-text fs-4 me-3"></i>
+                        <span>Report</span>
+                    </a>
+                    <a href="{{url_for('users.index')}}" class="d-flex align-items-center list-group-item list-group-item-action px-3 {% if request.path==url_for('users.index') %}list-group-item-dark{% endif %}"  aria-current="true">
+                        <i class="bi bi-people fs-4 me-3"></i>
+                        <span>Users</span>
+                    </a>
+                    <a href="{{url_for('settings.index')}}" class="d-flex align-items-center list-group-item list-group-item-action px-3 {% if request.path==url_for('settings.index') %}list-group-item-dark{% endif %}"  aria-current="true">
+                        <i class="bi bi-gear fs-4 me-3"></i>
+                        <span>Settings</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+        <nav class="navbar navbar-expand-lg bg-white fixed-top border-bottom" style="height: 56.67px">
+            <div class="container-fluid">
+                <div class="ms-2">
+                    <a class="navbar-brand fw-semibold me-2">Motor control system</a>
+                    <button id="sidebar-action-btn" class="btn btn-outline-secondary border-0 p-1 py-0 d-none d-lg-inline">
+                        <i class="bi bi-arrow-bar-right fs-5 fw-bold"></i>
+                    </button>
+                </div>
+                <div class="me-2">
+                    <form class="d-inline" action="{{ url_for('auth.logout') }}" method="POST">
+                        <button class="btn btn-outline-secondary" type="submit">
+                            <i class="bi bi-box-arrow-left"></i>
+                            Logout
+                        </button>
+                    </form>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle sidebar">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main id="main" style="margin-top: 56.67px;">
+        <div class="container-fluid">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+</body>
+<script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function(){
+        $("#sidebar-action-btn").on('click', function(){
+            $("#sidebar").toggleClass("active");
+            $(this).toggleClass("active");
+        });
+    });
+</script>
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>
+{% block script %}
+{% endblock %}
+</html>
