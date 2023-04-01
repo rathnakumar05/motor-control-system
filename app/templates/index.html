@@ -79,7 +79,7 @@
 
 {% block content %}
 <div class="row mx-2 py-3">
-    <div class="col-lg-3 col-md-5 p-0 d-flex">
+    <div class="col-lg-3 col-md-6 p-0 d-flex">
         <div class="bg-dark-subtle m-1 flex-grow-1 position-relative d-flex flex-column" style="min-height: 150px;">
             <div class="position-absolute ms-3 mt-3"><i class="bi bi-calendar2-event fs-1"></i></div>
             <h4 class="text-center mt-4">TODAY</h4>
@@ -98,7 +98,7 @@
             <h3 class="p-2 mx-auto mb-3 d-inline-block border border-dark">{% if current_sequence!=None %}{{current_sequence}}{% endif %}</h3>
         </div>
     </div>
-    <div class="col-lg-4 col-md-11 p-0 d-flex">
+    <div class="col-lg-4 col-md-10 p-0 d-flex">
         <div class="bg-dark-subtle m-1 flex-grow-1 d-flex flex-column position-relative" style="min-height: 150px;">
             <div class="position-absolute top-0 end-0 mt-2 me-2"><i class="bi bi-bell-fill"></i></div>
             <h5 class="ms-2 mt-2">NOTIFICATION :</h5>
@@ -108,12 +108,9 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-2 col-md-2 p-0">
-        <div class="bg-dark-subtle m-1 mb-2 d-flex flex-column" style="height: 120px;">
-            <div class="m-auto"><i class="bi bi-sun-fill text-warning" style="font-size: 3.8rem!important;"></i></div>
-        </div>
-        <div class="bg-dark-subtle m-1 d-flex flex-column" style="height: 120px;">
-            <div class="m-auto"><i class="bi bi-moon-stars-fill text-secondary" style="font-size: 3.8rem!important;"></i></div>
+    <div class="col-lg-2 col-md-2 p-0 d-flex">
+        <div class="bg-dark-subtle m-1 flex-grow-1 d-flex flex-column">
+            <div class="m-auto" id="d-n"></div>
         </div>
     </div>
     <div class="col-lg-9 col-sm-12 p-0">
@@ -128,13 +125,13 @@
                 {% endif %}
                 <h5 class="text-center my-2">MOTOR {{i}}</h5>
                 <div class="switchToggle mx-auto my-2">
-                    <input class="switch" data-index="{{i}}" data-forward-position={{motors[i|string]["forward"]["position"]}} data-reverse-position={{motors[i|string]["reverse"]["position"]}} type="checkbox" id="switch{{i}}" {% if motors[i|string]["forward"]["output"]==1 %}checked{% endif %} {% if motors[i|string]["enable"]==0 %}disabled{% endif %} />
+                    <input class="switch" data-index="{{i}}" data-forward-position={{motors[i|string]["forward"]["position"]}} data-reverse-position={{motors[i|string]["reverse"]["position"]}} type="checkbox" id="switch{{i}}" {% if motors[i|string]["forward"]["output"]==0 %}checked{% endif %} {% if motors[i|string]["enable"]==0 %}disabled{% endif %} />
                     <label for="switch{{i}}">Toggle</label>
                 </div>
-                <h6 id="status{{i}}" class="text-center my-1">{% if motors[i|string]["forward"]["output"]==1 %}Opened{% else %}Closed{% endif %}</h6>
+                <h6 id="status{{i}}" class="text-center my-1">{% if motors[i|string]["forward"]["output"]==0 %}Opened{% else %}Closed{% endif %}</h6>
                 <div class="d-flex justify-content-between my-1">
-                    <span id="left{{i}}" class="p-2 rounded-circle {% if motors[i|string]['forward']['output']==1 %}bg-secondary{% else %}bg-danger{% endif %} ms-4"></span>
-                    <span id="right{{i}}" class="p-2 rounded-circle {% if motors[i|string]['forward']['output']==1 %}bg-danger{% else %}bg-secondary{% endif %} me-4"></span>
+                    <span id="left{{i}}" class="p-2 rounded-circle {% if motors[i|string]['forward']['output']==0 %}bg-secondary{% else %}bg-danger{% endif %} ms-4"></span>
+                    <span id="right{{i}}" class="p-2 rounded-circle {% if motors[i|string]['forward']['output']==0 %}bg-danger{% else %}bg-secondary{% endif %} me-4"></span>
                 </div>
             </div>
             {% endfor %}
@@ -149,13 +146,13 @@
                 {% endif %}
                 <h5 class="text-center my-2">MOTOR {{i}}</h5>
                 <div class="switchToggle mx-auto my-2">
-                    <input class="switch" data-index="{{i}}" data-forward-position={{motors[i|string]["forward"]["position"]}} data-reverse-position={{motors[i|string]["reverse"]["position"]}} type="checkbox" id="switch{{i}}" {% if motors[i|string]["forward"]["output"]==1 %}checked{% endif %} {% if motors[i|string]["enable"]==0 %}disabled{% endif %} />
+                    <input class="switch" data-index="{{i}}" data-forward-position={{motors[i|string]["forward"]["position"]}} data-reverse-position={{motors[i|string]["reverse"]["position"]}} type="checkbox" id="switch{{i}}" {% if motors[i|string]["forward"]["output"]==0 %}checked{% endif %} {% if motors[i|string]["enable"]==0 %}disabled{% endif %} />
                     <label for="switch{{i}}">Toggle</label>
                 </div>
-                <h6 id="status{{i}}" class="text-center my-1">{% if motors[i|string]["forward"]["output"]==1 %}Opened{% else %}Closed{% endif %}</h6>
+                <h6 id="status{{i}}" class="text-center my-1">{% if motors[i|string]["forward"]["output"]==0 %}Opened{% else %}Closed{% endif %}</h6>
                 <div class="d-flex justify-content-between my-1">
-                    <span id="left{{i}}" class="p-2 rounded-circle {% if motors[i|string]['forward']['output']==1 %}bg-secondary{% else %}bg-danger{% endif %} ms-4"></span>
-                    <span id="right{{i}}" class="p-2 rounded-circle {% if motors[i|string]['forward']['output']==1 %}bg-danger{% else %}bg-secondary{% endif %} me-4"></span>
+                    <span id="left{{i}}" class="p-2 rounded-circle {% if motors[i|string]['forward']['output']==0 %}bg-secondary{% else %}bg-danger{% endif %} ms-4"></span>
+                    <span id="right{{i}}" class="p-2 rounded-circle {% if motors[i|string]['forward']['output']==0 %}bg-danger{% else %}bg-secondary{% endif %} me-4"></span>
                 </div>
             </div>
             {% endfor %}
@@ -167,7 +164,7 @@
             <div class="flex-fill bg-dark-subtle m-1 d-flex flex-column" style="height: 150px;">
                 <h3 class="text-center text-danger my-2">EMERGENCY</h3>
                 <i class="bi bi-exclamation-triangle text-danger fs-3 text-center"></i>
-                <button class="btn btn-outline-danger btn-md m-auto rounded-0"><i class="bi bi-x-square"></i> TURN OFF</button>
+                <button id="emergency" class="btn btn-outline-danger btn-md m-auto rounded-0"><i class="bi bi-x-square"></i> TURN OFF</button>
             </div>
         </div>
         <div class="d-flex justify-content-center flex-wrap">
@@ -212,7 +209,6 @@
                             <p class="text-center">This page will auto-refresh in 2 seconds.</p>
                         </div>
                     `);
-                    $(`#switch${index}`).prop("disabled", false);
                     setTimeout(function(){
                         location.reload();
                     }, 2000);
@@ -251,14 +247,134 @@
     var weekday = date.toLocaleDateString('en-US', { weekday: 'long' });
     var formattede_weekday = weekday.charAt(0).toUpperCase() + weekday.slice(1);
 
-    $("#date").html(parts[1].slice(0, -1)+"-"+parts[0]+"-"+parts[2]);
+    var p1 = parts[1].slice(0, -1) <= 9 ? "0"+parts[1].slice(0, -1) : parts[1].slice(0, -1)
+    $("#date").html(p1+"-"+parts[0]+"-"+parts[2]);
     $("#day").html(formattede_weekday);
 
     function displayTime() {
         var date = new Date();
         var time = date.toLocaleTimeString();
         $('#time').html(time);
+
+        var hour = date.getHours();
+        if (hour >= 6 && hour < 18) {
+            $("#d-n").html(`<i class="bi bi-sun-fill text-warning" style="font-size: 5rem!important;"></i>`);
+        } else {
+            $("#d-n").html(`<i class="bi bi-moon-stars-fill text-white" style="font-size: 5rem!important;"></i>`);
+        }
     }
     setInterval(displayTime, 1000);
+</script>
+<script>
+    $("#reset").on("click", function(){
+        $.ajax({
+            url: "{{url_for('dashboard.reset')}}",
+            method: 'GET',
+            beforeSend: function() {
+                $("#message").replaceWith(`
+                    <div id="message" class="alert alert-warning mb-2 flex-fill mx-2 rounded-0 d-flex flex-column" role="alert">
+                        <p class="text-center mb-1">Please don't refresh the page before confirmation</p>
+                        <div class="spinner-grow mx-auto" style="width: 3rem; height: 3rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="text-center">Waiting for confirmation...</p>
+                    </div>
+                `);
+            },
+            success: function(response) {
+                if(response=="success"){
+                    $("#message").replaceWith(`
+                        <div id="message" class="alert alert-success mb-2 flex-fill mx-2 rounded-0 d-flex flex-column" role="alert">
+                            <h1 class="text-center fs-1"><i class="bi bi-check2-circle"></i></h1>
+                            <p class="text-center">Action successfull</p>
+                            <p class="text-center">This page will auto-refresh in 2 seconds.</p>
+                        </div>
+                    `);
+                    setTimeout(function(){
+                        location.reload();
+                    }, 2000);
+                }else{
+                    $("#message").replaceWith(`
+                        <div id="message" class="alert alert-danger mb-2 flex-fill mx-2 rounded-0 d-flex flex-column" role="alert">
+                            <h1 class="text-center fs-1"><i class="bi bi-x-circle"></i></h1>
+                            <p class="text-center">Something went wrong please try again or refresh the page..</p>
+                        </div>
+                    `);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $("#message").replaceWith(`
+                        <div id="message" class="alert alert-danger mb-2 flex-fill mx-2 rounded-0 d-flex flex-column" role="alert">
+                            <h1 class="text-center fs-1"><i class="bi bi-x-circle"></i></h1>
+                            <p class="text-center">Something went wrong please try again or refresh the page..</p>
+                        </div>
+                `);
+            }
+        });
+    });
+
+    $("#emergency").on("click", function(){
+        $.ajax({
+            url: "{{url_for('dashboard.emergency')}}",
+            method: 'GET',
+            beforeSend: function() {
+                $("#message").replaceWith(`
+                    <div id="message" class="alert alert-warning mb-2 flex-fill mx-2 rounded-0 d-flex flex-column" role="alert">
+                        <p class="text-center mb-1">Please don't refresh the page before confirmation</p>
+                        <div class="spinner-grow mx-auto" style="width: 3rem; height: 3rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="text-center">Waiting for confirmation...</p>
+                    </div>
+                `);
+            },
+            success: function(response) {
+                if(response=="success"){
+                    $("#message").replaceWith(`
+                        <div id="message" class="alert alert-success mb-2 flex-fill mx-2 rounded-0 d-flex flex-column" role="alert">
+                            <h1 class="text-center fs-1"><i class="bi bi-check2-circle"></i></h1>
+                            <p class="text-center">Action successfull</p>
+                            <p class="text-center">This page will auto-refresh in 2 seconds.</p>
+                        </div>
+                    `);
+                    setTimeout(function(){
+                        location.reload();
+                    }, 2000);
+                }else{
+                    $("#message").replaceWith(`
+                        <div id="message" class="alert alert-danger mb-2 flex-fill mx-2 rounded-0 d-flex flex-column" role="alert">
+                            <h1 class="text-center fs-1"><i class="bi bi-x-circle"></i></h1>
+                            <p class="text-center">Something went wrong please try again or refresh the page..</p>
+                        </div>
+                    `);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $("#message").replaceWith(`
+                        <div id="message" class="alert alert-danger mb-2 flex-fill mx-2 rounded-0 d-flex flex-column" role="alert">
+                            <h1 class="text-center fs-1"><i class="bi bi-x-circle"></i></h1>
+                            <p class="text-center">Something went wrong please try again or refresh the page..</p>
+                        </div>
+                `);
+            }
+        });
+    });
+</script>
+<script>
+    let ajaxInProgress = false;
+    $(document).on({
+      ajaxStart: function() {
+        ajaxInProgress = true;
+      },
+      ajaxStop: function() {
+        ajaxInProgress = false;
+      }
+    });
+    window.addEventListener("beforeunload", function(event) {
+      if (ajaxInProgress) {
+        event.preventDefault();
+        event.returnValue = "There are unsaved changes. Are you sure you want to leave the page?";
+      }
+    });
 </script>
 {% endblock %}

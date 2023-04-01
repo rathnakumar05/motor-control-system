@@ -1,0 +1,62 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1>{{error}}</h1>
+{% if error_type=="config" %}
+<a href="{{ url_for('settings.index') }}">click here</a>
+{% endif %}
+<div id="message" class="d-block"></div>
+{% endblock %}
+
+{% block script %}
+{% if error_type=="emergency" %}
+<script>
+    $("#reset").on("click", function(){
+        $.ajax({
+            url: "{{url_for('dashboard.reset')}}",
+            method: 'GET',
+            beforeSend: function() {
+                $("#message").replaceWith(`
+                    <div id="message" class="alert alert-warning mb-2 flex-fill mx-2 rounded-0 d-flex flex-column" role="alert">
+                        <p class="text-center mb-1">Please don't refresh the page before confirmation</p>
+                        <div class="spinner-grow mx-auto" style="width: 3rem; height: 3rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="text-center">Waiting for confirmation...</p>
+                    </div>
+                `);
+            },
+            success: function(response) {
+                if(response=="success"){
+                    $("#message").replaceWith(`
+                        <div id="message" class="alert alert-success mb-2 flex-fill mx-2 rounded-0 d-flex flex-column" role="alert">
+                            <h1 class="text-center fs-1"><i class="bi bi-check2-circle"></i></h1>
+                            <p class="text-center">Action successfull</p>
+                            <p class="text-center">This page will auto-refresh in 2 seconds.</p>
+                        </div>
+                    `);
+                    setTimeout(function(){
+                        location.reload();
+                    }, 2000);
+                }else{
+                    $("#message").replaceWith(`
+                        <div id="message" class="alert alert-danger mb-2 flex-fill mx-2 rounded-0 d-flex flex-column" role="alert">
+                            <h1 class="text-center fs-1"><i class="bi bi-x-circle"></i></h1>
+                            <p class="text-center">Something went wrong please try again or refresh the page..</p>
+                        </div>
+                    `);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $("#message").replaceWith(`
+                        <div id="message" class="alert alert-danger mb-2 flex-fill mx-2 rounded-0 d-flex flex-column" role="alert">
+                            <h1 class="text-center fs-1"><i class="bi bi-x-circle"></i></h1>
+                            <p class="text-center">Something went wrong please try again or refresh the page..</p>
+                        </div>
+                `);
+            }
+        });
+    });
+</script>
+{% endif %}
+{% endblock %}

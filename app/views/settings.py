@@ -1,9 +1,16 @@
-from flask import Blueprint, redirect, render_template, request
+from flask import Blueprint, redirect, render_template, request, url_for, session
 import json
 
 from app import app
 
 settings = Blueprint("settings", __name__)
+
+@settings.before_request
+def settings_middleware():
+    if not session.get("auth")=="Y":
+        return redirect(url_for("auth.login"))
+    if not session.get("role")=="admin":
+        return redirect(url_for("dashboard.index")) 
 
 @settings.route("/settings", methods=["GET"])
 def index():
@@ -12,6 +19,13 @@ def index():
         content = f.read()
         if content:
             settings = json.loads(content)
+            order = []
+            for i in range(1, 9):
+                order.append(str(i))
+                order.append(str(17-i))
+            settings = {key: settings[key] for key in order}
+            
+                
     return render_template("settings.html", settings=settings)
 
 @settings.route("/settings/editform", methods=["GET"])
@@ -69,3 +83,16 @@ def edit():
     response["message"] = "something went wrong, try again"
 
     return response
+
+@settings.route("/settings/backup", methods=["GET"])
+def backup():
+    settings = None
+    with open(app.config["BACKUP_SETTINGS_PATH"], 'r') as f:
+        content = f.read()
+        if content:
+            settings = json.loads(content)
+    if settings:
+        with open(app.config["SETTINGS_PATH"], 'w') as f:
+            f.write(json.dumps(settings))
+
+    return "success"

@@ -1,0 +1,103 @@
+{% extends 'layout.html' %}
+
+{% block style %}
+<style>
+    td{
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-daterangepicker@3.1.0/daterangepicker.css">
+
+<div class="row mx-2 py-3">
+    <div class="d-flex justify-content-center">
+        <h1 class="mb-3">Report</h1>
+        <div class="input-group mb-3 ms-auto" style="width: 16rem">
+            <span class="input-group-text"><i class="bi bi-calendar2-event"></i></span>
+            <input type="text" name="daterange" class="form-control datepicker" readonly>
+        </div>
+    </div>
+    <div class="col-12">
+        <table id="table" class="table border rounded mt-2">
+            <thead>
+                <tr>
+                  <th class="text-center">#</th>
+                  <th class="text-center">MOTOR</th>
+                  <th class="text-center">SQUENCE</th>
+                  <th class="text-center">USER</th>
+                  <th class="text-center">DATE AND TIME</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $(function() {
+        $('.datepicker').daterangepicker({
+            linkedCalendars: false,
+            opens: "left",
+            startDate: '{{start_date}}',
+            endDate: '{{end_date}}',
+            locale: {
+                format: 'YYYY-MM-DD'
+            },
+            showDropdowns:true,
+            minDate: '2023-01-01',
+            maxDate:new Date(),
+        });
+    });
+
+    $('.datepicker').on('apply.daterangepicker', function(ev, picker) {
+        var start_date = picker.startDate.format('YYYY-MM-DD');
+        var end_date = picker.endDate.format('YYYY-MM-DD');
+        getData(start_date, end_date);
+    });
+
+    function getData(start_date, end_date){
+        var table=$('#table').DataTable();
+        table.destroy();
+        $('#table tbody').empty();
+
+        $('#table').DataTable( {
+        "ordering": false,
+        "lengthMenu": [ 10,25, 50, 75, 100 ],
+        "ajax": {
+            'url':"{{url_for('report.data')}}",
+            'type':'POST',
+            'data':{'start_date': start_date, 'end_date': end_date}
+        },
+        "serverside": true,
+        "bPaginate": true,
+        "bLengthChange": true,
+        "bFilter": false,
+        "bInfo": true,
+        "bAutoWidth": true,
+        columns: [
+            {"data": "id"},
+            {"data": "motor"},
+            {"data": "squence"},
+            {"data": "user"}, 
+            {"data": "datetime"}                   
+        ]
+      });
+    }
+
+    getData('{{start_date}}', '{{end_date}}');
+});
+
+</script>
+{% endblock %}

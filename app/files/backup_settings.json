@@ -1,7 +1,7 @@
 {
     "1": {
       "index": 1,
-      "operation_pin": 1,
+      "operation_mode": 1,
       "relay": "None",
       "feed_back": 1,
       "pin": "None",
@@ -10,7 +10,7 @@
     },
     "2": {
       "index": 2,
-      "operation_pin": 1,
+      "operation_mode": 1,
       "relay": "None",
       "feed_back": 1,
       "pin": "None",
@@ -19,7 +19,7 @@
     },
     "3": {
       "index": 3,
-      "operation_pin": 1,
+      "operation_mode": 1,
       "relay": "None",
       "feed_back": 1,
       "pin": "None",
@@ -28,7 +28,7 @@
     },
     "4": {
       "index": 4,
-      "operation_pin": 1,
+      "operation_mode": 1,
       "relay": "None",
       "feed_back": 1,
       "pin": "None",
@@ -37,7 +37,7 @@
     },
     "5": {
       "index": 5,
-      "operation_pin": 1,
+      "operation_mode": 1,
       "relay": "None",
       "feed_back": 1,
       "pin": "None",
@@ -46,7 +46,7 @@
     },
     "6": {
       "index": 6,
-      "operation_pin": 1,
+      "operation_mode": 1,
       "relay": "None",
       "feed_back": 1,
       "pin": "None",
@@ -55,7 +55,7 @@
     },
     "7": {
       "index": 7,
-      "operation_pin": 1,
+      "operation_mode": 1,
       "relay": "None",
       "feed_back": 1,
       "pin": "None",
@@ -64,7 +64,7 @@
     },
     "8": {
       "index": 8,
-      "operation_pin": 1,
+      "operation_mode": 1,
       "relay": "None",
       "feed_back": 1,
       "pin": "None",
@@ -73,7 +73,7 @@
     },
     "9": {
       "index": 8,
-      "operation_pin": 0,
+      "operation_mode": 0,
       "relay": "None",
       "feed_back": 0,
       "pin": "None",
@@ -82,7 +82,7 @@
     },
     "10": {
       "index": 7,
-      "operation_pin": 0,
+      "operation_mode": 0,
       "relay": "None",
       "feed_back": 0,
       "pin": "None",
@@ -91,7 +91,7 @@
     },
     "11": {
       "index": 6,
-      "operation_pin": 0,
+      "operation_mode": 0,
       "relay": "None",
       "feed_back": 0,
       "pin": "None",
@@ -100,7 +100,7 @@
     },
     "12": {
       "index": 5,
-      "operation_pin": 0,
+      "operation_mode": 0,
       "relay": "None",
       "feed_back": 0,
       "pin": "None",
@@ -109,7 +109,7 @@
     },
     "13": {
       "index": 4,
-      "operation_pin": 0,
+      "operation_mode": 0,
       "relay": "None",
       "feed_back": 0,
       "pin": "None",
@@ -118,7 +118,7 @@
     },
     "14": {
       "index": 3,
-      "operation_pin": 0,
+      "operation_mode": 0,
       "relay": "None",
       "feed_back": 0,
       "pin": "None",
@@ -127,7 +127,7 @@
     },
     "15": {
       "index": 2,
-      "operation_pin": 0,
+      "operation_mode": 0,
       "relay": "None",
       "feed_back": 0,
       "pin": "None",
@@ -136,7 +136,7 @@
     },
     "16": {
       "index": 1,
-      "operation_pin": 0,
+      "operation_mode": 0,
       "relay": "None",
       "feed_back": 0,
       "pin": "None",

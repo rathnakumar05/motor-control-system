@@ -9,11 +9,13 @@ from app.views.auth import auth
 from app.views.dashboard import dashboard
 from app.views.users import users
 from app.views.settings import settings
+from app.views.report import report
 
 app.register_blueprint(auth)
 app.register_blueprint(dashboard)
 app.register_blueprint(users)
 app.register_blueprint(settings)
+app.register_blueprint(report)
 
 
 #user table structure
@@ -24,6 +26,15 @@ app.register_blueprint(settings)
 #     created_date VARCHAR(100) DEFAULT NULL,
 #     modified_date VARCHAR(100) DEFAULT NULL
 #  )
+
+# CREATE TABLE report (
+#     id INTEGER PRIMARY KEY AUTOINCREMENT,
+#     users VARCHAR(100) DEFAULT NULL,
+#     squence VARCHAR(100) DEFAULT NULL,
+#     motor VARCHAR(100) DEFAULT NULL,
+#     created_date VARCHAR(100) DEFAULT NULL,
+#     created_date_int INTEGER DEFAULT NULL
+# )
 
 # {
 #     "index": 2, motor_number
