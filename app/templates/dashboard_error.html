@@ -9,7 +9,6 @@
 {% endblock %}
 
 {% block script %}
-{% if error_type=="emergency" %}
 <script>
     $("#reset").on("click", function(){
         $.ajax({
@@ -58,5 +57,4 @@
         });
     });
 </script>
-{% endif %}
 {% endblock %}

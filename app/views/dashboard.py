@@ -129,8 +129,8 @@ def action():
                     flag = 1
     if flag==1:
         start_time = time.time()
-        # t = threading.Thread(target=sim, args=(input,))
-        # t.start()
+        t = threading.Thread(target=sim, args=(input,))
+        t.start()
         while time.time()-start_time < input["buffer_time"]+5:
             pass
         input["waiting"] = 0
@@ -205,16 +205,31 @@ def emergency():
     else:
         return "error"
     
-@dashboard.route("/rest", methods=["GET"])
+@dashboard.route("/reset", methods=["GET"])
 def reset():
     flag = 0
-    with open(app.config["INPUT_PATH"], 'w') as f:
-        f.write("")
-
-    with open(app.config["INPUT_PATH"]) as f:
+    settings = None
+    input = None
+    with open(app.config["SETTINGS_PATH"]) as f:
         content = f.read()
-        if not content:
-            flag = 1
+        settings = json.loads(content)
+    if settings is not None and settings.get('16') is not None:
+        input = settings.get('16')
+
+    if input is not None:
+        input["waiting"] = 0
+        input["status"] = 0
+        with open(app.config["INPUT_PATH"], 'w') as f:
+            f.write(json.dumps(input))
+
+        with open(app.config["INPUT_PATH"]) as f:
+            content = f.read()
+            if content:
+                input_check = json.loads(content)
+                if input_check==input:
+                    flag = 1
+                else:
+                    flag = 0
 
     if flag==1:
         return "success"
