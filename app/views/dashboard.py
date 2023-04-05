@@ -129,8 +129,8 @@ def action():
                     flag = 1
     if flag==1:
         start_time = time.time()
-        t = threading.Thread(target=sim, args=(input,))
-        t.start()
+        # t = threading.Thread(target=sim, args=(input,))
+        # t.start()
         while time.time()-start_time < input["buffer_time"]+5:
             pass
         input["waiting"] = 0
