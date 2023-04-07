@@ -129,10 +129,14 @@ def action():
                     flag = 1
     if flag==1:
         start_time = time.time()
-        t = threading.Thread(target=sim, args=(input,))
-        t.start()
+        # t = threading.Thread(target=sim, args=(input,))
+        # t.start()
         while time.time()-start_time < input["buffer_time"]+5:
             pass
+        with open(app.config["INPUT_PATH"]) as f:
+            content = f.read()
+            if content:
+                input = json.loads(content)
         input["waiting"] = 0
         with open(app.config["INPUT_PATH"], 'w') as f:
             f.write(json.dumps(input))
