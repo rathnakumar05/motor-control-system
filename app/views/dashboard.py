@@ -21,6 +21,10 @@ def index():
     motors = None
     current_sequence = None
     current_motor = None
+    issue = 0
+    emergency = 0
+    waiting = 0
+
     with open(app.config["SETTINGS_PATH"]) as f:
         content = f.read()
         if content:
@@ -48,10 +52,7 @@ def index():
             motors[str(i)]["forward"]["output"] = output["S"+str(settings[str(i)]["relay"])]
             motors[str(i)]["reverse"]["output"] = output["S"+str(settings[str(17-i)]["relay"])]
 
-        issue = 0
-        emergency = 0
-        waiting = 0
-        if input and output:
+        if input:
             if input["relay"]==99:
                 issue = 1
                 emergency = 1
