@@ -43,48 +43,114 @@ def index():
                 "reverse" : settings[str(17-i)],
                 "enable" : 0
             }
-            if output["S"+str(settings[str(i)]["relay"])] is not None and output["S"+str(settings[str(i)]["relay"])]==0 and output["S"+str(settings[str(17-i)]["relay"])] is not None and output["S"+str(settings[str(17-i)]["relay"])]==0:
-                return render_template("dashboard_error.html", error="Something went wrong with the motor control system")
+            # if output["S"+str(settings[str(i)]["relay"])] is not None and output["S"+str(settings[str(i)]["relay"])]==0 and output["S"+str(settings[str(17-i)]["relay"])] is not None and output["S"+str(settings[str(17-i)]["relay"])]==0:
+            #     return render_template("dashboard_error.html", error="Something went wrong with the motor control system")
             motors[str(i)]["forward"]["output"] = output["S"+str(settings[str(i)]["relay"])]
             motors[str(i)]["reverse"]["output"] = output["S"+str(settings[str(17-i)]["relay"])]
 
+        issue = 0
+        emergency = 0
+        waiting = 0
         if input and output:
             if input["relay"]==99:
-                return render_template("dashboard_error.html", error="Reset the system after the emergency situation ended", error_type="emergency")
+                issue = 1
+                emergency = 1
+                # return render_template("dashboard_error.html", error="Reset the system after the emergency situation ended", error_type="emergency")
             if input.get("waiting") is not None and input["waiting"]==1:
-                motors[str(input["index"])]["enable"] = 1
-                if input["operation_mode"]==1:
+                waiting = 1
+            if input["operation_mode"]==1:
+                if input["index"]!=8:
+                    motors[str(input["index"]+1)]["enable"] = 1
                     current_sequence = "OPEN"
+                    current_motor = str(input["index"]+1)
                 else:
-                   current_sequence = "CLOSE" 
-                current_motor = str(input["index"])
+                    motors[str(input["index"])]["enable"] = 1
+                    current_sequence = "CLOSE"
+                    current_motor = str(input["index"])
             else:
-                if input["operation_mode"]==1:
-                    if input["index"]!=8:
-                        motors[str(input["index"]+1)]["enable"] = 1
-                        current_sequence = "OPEN"
-                        current_motor = str(input["index"]+1)
-                    else:
-                        motors[str(input["index"])]["enable"] = 1
-                        current_sequence = "CLOSE"
-                        current_motor = str(input["index"])
+                if input["index"]!=1:
+                    motors[str(input["index"]-1)]["enable"] = 1
+                    current_sequence = "CLOSE"
+                    current_motor = str(input["index"]-1)
                 else:
-                    if input["index"]!=1:
-                        motors[str(input["index"]-1)]["enable"] = 1
-                        current_sequence = "CLOSE"
-                        current_motor = str(input["index"]-1)
-                    else:
-                        motors[str(input["index"])]["enable"] = 1
-                        current_sequence = "OPEN"
-                        current_motor = str(input["index"])
-
+                    motors[str(input["index"])]["enable"] = 1
+                    current_sequence = "OPEN"
+                    current_motor = str(input["index"])
         else:
             if output["S"+str(settings[str(1)]["relay"])]==1 and output["S"+str(settings[str(16)]["relay"])]==0:
                 motors["1"]["enable"] = 1
                 current_sequence = "OPEN"
                 current_motor = "1"
+                input = { "index" : "1" }
 
-    return render_template("index.html", motors=motors, current_sequence=current_sequence, current_motor=current_motor)
+        if str(input["index"])=="1":
+            if input["operation_mode"]==0:
+                for key, value in motors.items():
+                    if not (value["forward"]["output"]==1 and value["reverse"]["output"]==0):
+                        motors[key]["issue"] = 1
+                        issue = 1
+            else:
+                temp_sequence = current_sequence
+                for key,value in motors.items():
+                    if temp_sequence=="CLOSE":
+                        if not (value["forward"]["output"]==1 and value["reverse"]["output"]==0):
+                            motors[key]["issue"] = 1
+                            issue = 1
+                    else:
+                        if not (value["forward"]["output"]==0 and value["reverse"]["output"]==1):
+                            motors[key]["issue"] = 1
+                            issue = 1
+                    if str(input["index"])==key:
+                        temp_sequence = "CLOSE" if temp_sequence=="OPEN" else "OPEN"
+
+        elif str(input["index"])=="8":
+            if input["operation_mode"]==1:
+                for key, value in motors.items():
+                    if not (value["forward"]["output"]==0 and value["reverse"]["output"]==1):
+                        motors[key]["issue"] = 1
+                        issue = 1
+            else:
+                temp_sequence = current_sequence
+                for key,value in motors.items():
+                    if str(input["index"])==key:
+                        temp_sequence = "CLOSE" if temp_sequence=="OPEN" else "OPEN"
+                    if temp_sequence=="CLOSE":
+                        if not (value["forward"]["output"]==0 and value["reverse"]["output"]==1):
+                            motors[key]["issue"] = 1
+                            issue = 1
+                    else:
+                        if not (value["forward"]["output"]==1 and value["reverse"]["output"]==0):
+                            motors[key]["issue"] = 1
+                            issue = 1
+        else:
+            if current_sequence=="OPEN":
+                temp_sequence = current_sequence
+                for key,value in motors.items():
+                    if temp_sequence=="CLOSE":
+                        if not (value["forward"]["output"]==1 and value["reverse"]["output"]==0):
+                            motors[key]["issue"] = 1
+                            issue = 1
+                    else:
+                        if not (value["forward"]["output"]==0 and value["reverse"]["output"]==1):
+                            motors[key]["issue"] = 1
+                            issue = 1
+                    if str(input["index"])==key:
+                        temp_sequence = "CLOSE" if temp_sequence=="OPEN" else "OPEN"
+            else:
+                temp_sequence = current_sequence
+                for key,value in motors.items():
+                    if str(input["index"])==key:
+                        temp_sequence = "CLOSE" if temp_sequence=="OPEN" else "OPEN"
+                    if temp_sequence=="CLOSE":
+                        if not (value["forward"]["output"]==0 and value["reverse"]["output"]==1):
+                            motors[key]["issue"] = 1
+                            issue = 1
+                    else:
+                        if not (value["forward"]["output"]==1 and value["reverse"]["output"]==0):
+                            motors[key]["issue"] = 1
+                            issue = 1
+
+    return render_template("index.html", motors=motors, current_sequence=current_sequence, current_motor=current_motor, issue=issue, emergency=emergency, waiting=waiting)
 
 def sim(input):
     output = None
@@ -164,25 +230,36 @@ def action():
     else:
         return "error"
     
-@dashboard.route("/emergency", methods=["GET"])
+@dashboard.route("/emergency", methods=["POST"])
 def emergency():
+    status = int(request.form.get("status"))
     input = None
     flag = 0
     with open(app.config["INPUT_PATH"]) as f:
         content = f.read()
         if content:
             input = json.loads(content)
+
+    settings = None
+    with open(app.config["SETTINGS_PATH"]) as f:
+        content = f.read()
+        settings = json.loads(content)
     if input==None:
-        settings = None
-        with open(app.config["SETTINGS_PATH"]) as f:
-            content = f.read()
-            settings = json.loads(content)
         if settings:
             input = settings["1"]
-            input["waiting"] = 1
-            input["status"] = 1
+            input["waiting"] = 0
+            input["status"] = 0
+    else:
+        input = settings[str(input["position"])] 
+        input["waiting"] = 0
+        input["status"] = 0
 
-    input["relay"] = 99
+    state = "OFF"
+    if status==1:
+        state = "ON"
+        input["relay"] = 99
+        input["status"] = 1
+
     with open(app.config["INPUT_PATH"], 'w') as f:
         f.write(json.dumps(input))
     with open(app.config["INPUT_PATH"]) as f:
@@ -199,7 +276,7 @@ def emergency():
             cursor = conn.cursor()
             sql = '''INSERT INTO report(users, squence, motor, created_date, created_date_int) VALUES(?, ?, ?, datetime('now'),strftime('%s','now'))'''
             username = session.get("username")
-            squence = "emergency"
+            squence = f"emergency {state}"
             motor = input["index"]
             cursor.execute(sql, (username, squence, motor))
             conn.commit()
