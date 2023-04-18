@@ -270,6 +270,19 @@
                     }, 2000);
                 }else if(response=="waiting"){
                     console.log("waiting");
+                }else if(response=="logout"){
+                    $("#message").replaceWith(`
+                        <div id="message" class="alert alert-success mb-2 flex-fill mx-2 rounded-0 d-flex flex-column" role="alert">
+                            <h1 class="text-center fs-1"><i class="bi bi-check2-circle"></i></h1>
+                            <p class="text-center">Action successfull</p>
+                            <p class="text-center">This page will auto-refresh in 2 seconds.</p>
+                        </div>
+                    `);
+                    setTimeout(function(){
+                        var current_url = location.href;
+                        var new_url = current_url + '?p=Y';
+                        window.location.href = new_url;
+                    }, 2000);
                 }else{
                     $("#message").replaceWith(`
                         <div id="message" class="alert alert-danger mb-2 flex-fill mx-2 rounded-0 d-flex flex-column" role="alert">
@@ -441,7 +454,7 @@
 <script>
     setTimeout(function(){
         location.reload();
-    }, 2000);
+    }, 5000);
 </script>
 {% endif %}
 {% endblock %}

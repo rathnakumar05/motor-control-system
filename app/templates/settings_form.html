@@ -1,4 +1,4 @@
-<h5># {{current_config["position"]}}</h5>
+<h5># MOTOR {{current_config["index"]}} {% if current_config["operation_mode"]==1 %}(FORWARD){% else %}(REVERSE){% endif %}</h5>
 <form id="edit" method="POST">
     <input type="hidden" name="position" value="{{current_config['position']}}">
     <div class="mb-3">

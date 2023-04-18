@@ -1,0 +1,12 @@
+[Unit]
+Description=MCS
+After=multi-user.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/motor-control-system/
+ExecStart=python3 /home/pi/dev-dbmotor-control-system/run.py
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

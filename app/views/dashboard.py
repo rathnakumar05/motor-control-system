@@ -24,6 +24,7 @@ def index():
     issue = 0
     emergency = 0
     waiting = 0
+    logout = request.args.get("p")
 
     with open(app.config["SETTINGS_PATH"]) as f:
         content = f.read()
@@ -150,7 +151,10 @@ def index():
                         if not (value["forward"]["output"]==1 and value["reverse"]["output"]==0):
                             motors[key]["issue"] = 1
                             issue = 1
-
+    
+    if logout=="Y" and issue!=1:
+        session.clear()
+        return redirect(url_for("auth.login"))
     return render_template("index.html", motors=motors, current_sequence=current_sequence, current_motor=current_motor, issue=issue, emergency=emergency, waiting=waiting)
 
 def sim(input):
@@ -163,11 +167,11 @@ def sim(input):
     while time.time() - start_time < input["buffer_time"]:
         pass
     # reverse
-    # output["S"+str(input["relay"])] = input["operation_mode"] 
-    # output["S"+str(input["relay"]-1)] = 0 if input["operation_mode"]==1 else 1 
+    output["S"+str(input["relay"])] = input["operation_mode"] 
+    output["S"+str(input["relay"]-1)] = 0 if input["operation_mode"]==1 else 1 
     # forward 
-    output["S"+str(input["relay"])] = 0 if input["operation_mode"]==1 else 1
-    output["S"+str(input["relay"]+1)] = input["operation_mode"]
+    # output["S"+str(input["relay"])] = 0 if input["operation_mode"]==1 else 1
+    # output["S"+str(input["relay"]+1)] = input["operation_mode"]
     with open(app.config["OUTPUT_PATH"], 'w') as f:
         f.write(json.dumps(output))
 
@@ -215,19 +219,28 @@ def action():
                     flag = 1
                 else:
                     flag = 0
+
+    logout = "N"
+    if input["index"]==8 and input["operation_mode"]==1:
+        logout = "Y"
+    if input["index"]==1 and input["operation_mode"]==0:
+        logout = "Y"
     if flag==1:
         try:
             conn = sqlite3.connect(app.config["SQL"])
             cursor = conn.cursor()
             sql = '''INSERT INTO report(users, squence, motor, created_date, created_date_int) VALUES(?, ?, ?, datetime('now'),strftime('%s','now'))'''
-            username = session.get("username")
             squence = "open" if input["operation_mode"]==1 else "close"
             motor = input["index"]
+            username = session.get("username")
             cursor.execute(sql, (username, squence, motor))
             conn.commit()
         except Exception as err:
             pass
-        return "success"
+        if(logout=="Y"):
+            return "logout"
+        else:
+            return "success"
     else:
         return "error"
     
