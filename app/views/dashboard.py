@@ -229,7 +229,7 @@ def action():
         try:
             conn = sqlite3.connect(app.config["SQL"])
             cursor = conn.cursor()
-            sql = '''INSERT INTO report(users, squence, motor, created_date, created_date_int) VALUES(?, ?, ?, datetime('now'),strftime('%s','now'))'''
+            sql = '''INSERT INTO report(users, squence, motor, created_date, created_date_int) VALUES(?, ?, ?, datetime('now', 'localtime'),strftime('%s','now'))'''
             squence = "open" if input["operation_mode"]==1 else "close"
             motor = input["index"]
             username = session.get("username")
