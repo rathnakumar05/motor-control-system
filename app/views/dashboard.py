@@ -41,17 +41,17 @@ def index():
     if settings and output:
         motors = {}
         for i in range(1, 9):
-            if (settings[str(i)]["relay"] is not None and settings[str(i)]["relay"]=="None") or (settings[str(17-i)]["relay"] is not None and settings[str(17-i)]["relay"]=="None") :
+            if (settings[str(i)]["pin"] is not None and settings[str(i)]["pin"]=="None") or (settings[str(17-i)]["pin"] is not None and settings[str(17-i)]["pin"]=="None") :
                 return render_template("dashboard_error.html", error="Settings config not set properly", error_type="config")
             motors[str(i)] = {
                 "forward" : settings[str(i)],
                 "reverse" : settings[str(17-i)],
                 "enable" : 0
             }
-            # if output["S"+str(settings[str(i)]["relay"])] is not None and output["S"+str(settings[str(i)]["relay"])]==0 and output["S"+str(settings[str(17-i)]["relay"])] is not None and output["S"+str(settings[str(17-i)]["relay"])]==0:
+            # if output["S"+str(settings[str(i)]["pin"])] is not None and output["S"+str(settings[str(i)]["pin"])]==0 and output["S"+str(settings[str(17-i)]["pin"])] is not None and output["S"+str(settings[str(17-i)]["pin"])]==0:
             #     return render_template("dashboard_error.html", error="Something went wrong with the motor control system")
-            motors[str(i)]["forward"]["output"] = output["S"+str(settings[str(i)]["relay"])]
-            motors[str(i)]["reverse"]["output"] = output["S"+str(settings[str(17-i)]["relay"])]
+            motors[str(i)]["forward"]["output"] = output["S"+str(settings[str(i)]["pin"])]
+            motors[str(i)]["reverse"]["output"] = output["S"+str(settings[str(17-i)]["pin"])]
 
         if input:
             if input["relay"]==99:
@@ -79,7 +79,7 @@ def index():
                     current_sequence = "OPEN"
                     current_motor = str(input["index"])
         else:
-            if output["S"+str(settings[str(1)]["relay"])]==1 and output["S"+str(settings[str(16)]["relay"])]==0:
+            if output["S"+str(settings[str(1)]["pin"])]==1 and output["S"+str(settings[str(16)]["pin"])]==0:
                 motors["1"]["enable"] = 1
                 current_sequence = "OPEN"
                 current_motor = "1"
