@@ -79,7 +79,7 @@ def index():
                     current_sequence = "OPEN"
                     current_motor = str(input["index"])
         else:
-            if output["S"+str(settings[str(1)]["pin"])]==1 and output["S"+str(settings[str(16)]["pin"])]==0:
+            if output["S"+str(settings[str(1)]["pin"])]==0 and output["S"+str(settings[str(16)]["pin"])]==1:
                 motors["1"]["enable"] = 1
                 current_sequence = "OPEN"
                 current_motor = "1"
@@ -88,18 +88,18 @@ def index():
         if str(input["index"])=="1":
             if input["operation_mode"]==0:
                 for key, value in motors.items():
-                    if not (value["forward"]["output"]==1 and value["reverse"]["output"]==0):
+                    if not (value["forward"]["output"]==0 and value["reverse"]["output"]==1):
                         motors[key]["issue"] = 1
                         issue = 1
             else:
                 temp_sequence = current_sequence
                 for key,value in motors.items():
                     if temp_sequence=="CLOSE":
-                        if not (value["forward"]["output"]==1 and value["reverse"]["output"]==0):
+                        if not (value["forward"]["output"]==0 and value["reverse"]["output"]==1):
                             motors[key]["issue"] = 1
                             issue = 1
                     else:
-                        if not (value["forward"]["output"]==0 and value["reverse"]["output"]==1):
+                        if not (value["forward"]["output"]==1 and value["reverse"]["output"]==0):
                             motors[key]["issue"] = 1
                             issue = 1
                     if str(input["index"])==key:
@@ -108,7 +108,7 @@ def index():
         elif str(input["index"])=="8":
             if input["operation_mode"]==1:
                 for key, value in motors.items():
-                    if not (value["forward"]["output"]==0 and value["reverse"]["output"]==1):
+                    if not (value["forward"]["output"]==1 and value["reverse"]["output"]==0):
                         motors[key]["issue"] = 1
                         issue = 1
             else:
@@ -117,11 +117,11 @@ def index():
                     if str(input["index"])==key:
                         temp_sequence = "CLOSE" if temp_sequence=="OPEN" else "OPEN"
                     if temp_sequence=="CLOSE":
-                        if not (value["forward"]["output"]==0 and value["reverse"]["output"]==1):
+                        if not (value["forward"]["output"]==1 and value["reverse"]["output"]==0):
                             motors[key]["issue"] = 1
                             issue = 1
                     else:
-                        if not (value["forward"]["output"]==1 and value["reverse"]["output"]==0):
+                        if not (value["forward"]["output"]==0 and value["reverse"]["output"]==1):
                             motors[key]["issue"] = 1
                             issue = 1
         else:
@@ -129,11 +129,11 @@ def index():
                 temp_sequence = current_sequence
                 for key,value in motors.items():
                     if temp_sequence=="CLOSE":
-                        if not (value["forward"]["output"]==1 and value["reverse"]["output"]==0):
+                        if not (value["forward"]["output"]==0 and value["reverse"]["output"]==1):
                             motors[key]["issue"] = 1
                             issue = 1
                     else:
-                        if not (value["forward"]["output"]==0 and value["reverse"]["output"]==1):
+                        if not (value["forward"]["output"]==1 and value["reverse"]["output"]==0):
                             motors[key]["issue"] = 1
                             issue = 1
                     if str(input["index"])==key:
@@ -144,11 +144,11 @@ def index():
                     if str(input["index"])==key:
                         temp_sequence = "CLOSE" if temp_sequence=="OPEN" else "OPEN"
                     if temp_sequence=="CLOSE":
-                        if not (value["forward"]["output"]==0 and value["reverse"]["output"]==1):
+                        if not (value["forward"]["output"]==1 and value["reverse"]["output"]==0):
                             motors[key]["issue"] = 1
                             issue = 1
                     else:
-                        if not (value["forward"]["output"]==1 and value["reverse"]["output"]==0):
+                        if not (value["forward"]["output"]==0 and value["reverse"]["output"]==1):
                             motors[key]["issue"] = 1
                             issue = 1
     
